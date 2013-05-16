@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Notifier do
   describe ".remind" do
     before do
-      @person = create_person(:email => "foo@example.com")
+      @person = create_tuesday_lunch_person(:email => "foo@example.com")
       @location = @person.location
       ActionMailer::Base.deliveries = []
     end

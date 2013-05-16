@@ -4,72 +4,95 @@ describe Lottery do
   describe ".send_invitations!" do
     context "with groups" do
       before do
-        @pivotal = Location.create!(:name => "pivotal", :address => "731 Market Street San Francisco, CA")
+        tuesday = 2
+        wednesday = 3
+        @pivotal = Location.create!(:name => "pivotal", :address => "731 Market Street San Francisco, CA", day: tuesday)
         @pivotal_people = new_people(7, @pivotal, "2100-11-02 23:59")
         @pivotal_people.first.opt_in_datetime = nil
         @pivotal_people.each(&:save!)
 
-        @storek = Location.create!(:name => "storek", :address => "149 9th Street San Francisco, CA")
+        @storek = Location.create!(:name => "storek", :address => "149 9th Street San Francisco, CA", day: tuesday)
         @storek_people = new_people(3, @storek, "2100-11-02 23:59")
         @storek_people.each(&:save!)
 
-        Lottery.send_invitations!
+        @substantial = Location.create!(:name => "substantial", :address => "900 E Pine St, Seattle, WA", day: wednesday)
+        @substantial_people = new_people(3, @substantial, "2100-11-02 23:59")
+        @substantial_people.each(&:save!)
       end
 
-      it "invites groups of opted-in people" do
-        (ActionMailer::Base.deliveries[0].to + ActionMailer::Base.deliveries[1].to).should =~ %w[
+      context "when it is sunday" do
+        before do
+          sunday = Date.civil(2013, 5, 12)
+
+          Timecop.freeze(sunday) do
+            Lottery.send_invitations!
+          end
+        end
+
+        it "invites groups of opted-in tuesday people" do
+          (ActionMailer::Base.deliveries[0].to + ActionMailer::Base.deliveries[1].to).should =~ %w[
           pivotal_2@example.com pivotal_3@example.com pivotal_4@example.com
           pivotal_5@example.com pivotal_6@example.com pivotal_7@example.com
         ]
 
-        ActionMailer::Base.deliveries[2].to.to_a.should =~ %w[
+          ActionMailer::Base.deliveries[2].to.to_a.should =~ %w[
           storek_1@example.com storek_2@example.com storek_3@example.com
         ]
+        end
+
+        it "does not reset the opt-in flag yet" do
+          Person.opted_in.length.should == 12
+        end
       end
 
-      it "does not reset the opt-in flag yet" do
-        Person.opted_in.length.should == 9
+      it "does not send invites to those who have unsubscribed" do
+        @storek = Location.create!(:name => "storek", :address => "149 9th Street San Francisco, CA")
+
+        create_tuesday_lunch_person(:email => "quuxNope@example.com", :subscribed => false, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
+        create_tuesday_lunch_person(:email => "quux1@example.com", :subscribed => true, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
+        create_tuesday_lunch_person(:email => "quux2@example.com", :subscribed => true, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
+        create_tuesday_lunch_person(:email => "quux3@example.com", :subscribed => true, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
+        Lottery.send_invitations!
+        group_mail_deliveries = ActionMailer::Base.deliveries
+        grouped_emails = group_mail_deliveries.map(&:to)
+        grouped_emails.flatten.should_not include("quuxNope@example.com")
       end
-
-    end
-
-    it "does not send invites to those who have unsubscribed" do
-      @storek = Location.create!(:name => "storek", :address => "149 9th Street San Francisco, CA")
-
-      create_person(:email => "quuxNope@example.com", :subscribed => false, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
-      create_person(:email => "quux1@example.com", :subscribed => true, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
-      create_person(:email => "quux2@example.com", :subscribed => true, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
-      create_person(:email => "quux3@example.com", :subscribed => true, :opt_in_datetime => "2100-11-02 23:59", :location => @storek)
-      Lottery.send_invitations!
-      group_mail_deliveries = ActionMailer::Base.deliveries
-      grouped_emails = group_mail_deliveries.map(&:to)
-      grouped_emails.flatten.should_not include("quuxNope@example.com")
     end
   end
-  
+
+
   it "doesn't send an invitation if a group has less than 3 people" do
-    location = Location.create!(:name => "yelp", :address => "1 Market Street")
+    location = Location.create!(:name => "yelp", :address => "1 Market Street", day: 2)
     new_people(2, location, "2100-11-02 23:59").each(&:save!)
-    
+
     Lottery.send_invitations!
     ActionMailer::Base.deliveries.should be_empty
   end
 
   describe ".send_reminders!" do
     before do
-      create_person(:email => "foo@example.com")
-      create_person(:email => "foo2@example.com", :opt_in_datetime => nil)
+      create_tuesday_lunch_person(:email => "foo@example.com")
+      create_tuesday_lunch_person(:email => "foo2@example.com", :opt_in_datetime => nil)
+      create_wednesday_lunch_person(:email => "foowednesday@example.com")
+      create_wednesday_lunch_person(:email => "foo2wednesday@example.com", :opt_in_datetime => nil)
+      @monday = Date.civil(2013, 5, 13)
     end
 
-    it "sends the reminder to everyone" do
-      Lottery.send_reminders!
-      Person.count.should == 2
+    it "sends the reminder to tuesday people" do
+      Timecop.freeze(@monday) do
+        Lottery.send_reminders!
+      end
+      Person.count.should == 4
       ActionMailer::Base.deliveries.length.should == 2
     end
 
     it "does not send reminders to those who have unsubscribed" do
-      create_person(:email => "quux@example.com", :subscribed => false)
-      Lottery.send_reminders!
+      create_tuesday_lunch_person(:email => "quux@example.com", :subscribed => false)
+      create_wednesday_lunch_person(:email => "blamowed@example.com", :subscribed => false)
+
+      Timecop.freeze(@monday) do
+        Lottery.send_reminders!
+      end
       ActionMailer::Base.deliveries.length.should == 2
     end
   end

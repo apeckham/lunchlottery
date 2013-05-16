@@ -15,13 +15,13 @@ describe Person do
     end
 
     it "requires email to be unique" do
-      create_person(:email => "me@example.com")
+      create_tuesday_lunch_person(:email => "me@example.com")
       Person.new(:email => "me@example.com").should_not be_valid
     end
   end
 
   describe "#authentication_token" do
-    let(:user) { create_person(:email => "foo@example.com") }
+    let(:user) { create_tuesday_lunch_person(:email => "foo@example.com") }
 
     it "generates a uuid for the user" do
       user.authentication_token.should =~ /^\w{20}$/
@@ -34,7 +34,7 @@ describe Person do
   end
 
   describe ".find_by_authentication_token!" do
-    let(:user) { create_person(:email => "foo@example.com") }
+    let(:user) { create_tuesday_lunch_person(:email => "foo@example.com") }
 
 
     context "with a valid token" do
@@ -53,7 +53,7 @@ describe Person do
   describe "location" do
     it "should have a location" do
       location = Location.create!(:name => "pivotal", :address => "731 Market Street San Francisco, CA")
-      create_person(:email => "asdf@example.com", :location => location)
+      create_tuesday_lunch_person(:email => "asdf@example.com", :location => location)
       Person.find_by_email("asdf@example.com").location.should == Location.find_by_name("pivotal")
     end
 
@@ -69,7 +69,7 @@ describe Person do
     attr_reader :person
     before do
       location = Location.create!(:name => "pivotal", :address => "731 Market Street San Francisco, CA")
-      @person = create_person(:email => "asdf@example.com", :location => location)
+      @person = create_tuesday_lunch_person(:email => "asdf@example.com", :location => location)
     end
 
     context "has never opted in" do

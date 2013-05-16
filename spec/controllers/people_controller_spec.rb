@@ -30,8 +30,8 @@ describe PeopleController do
 
     it "should show people who are opted in above others" do
       location = Location.create!(:name => "mylocation", :address => "149 9th Street San Francisco, CA")
-      opted_in_person = create_person(:email => "in@example.com", :opt_in_datetime => DateTime.parse("9999-11-11 11:11:11 UTC"), :location => location)
-      non_opted_in_person = create_person(:email => "not_in@example.com", :opt_in_datetime => nil, :location => location)
+      opted_in_person = create_tuesday_lunch_person(:email => "in@example.com", :opt_in_datetime => DateTime.parse("9999-11-11 11:11:11 UTC"), :location => location)
+      non_opted_in_person = create_tuesday_lunch_person(:email => "not_in@example.com", :opt_in_datetime => nil, :location => location)
 
       get :index, :location => "mylocation"
 
@@ -89,7 +89,7 @@ describe PeopleController do
     end
 
     it "should re-subscribe the person if the email address of an existing unsubscribed person is entered" do
-      person = create_person(:email => "existing@example.com", :subscribed => false)
+      person = create_tuesday_lunch_person(:email => "existing@example.com", :subscribed => false)
       post :create, :person => {:email => "existing@example.com"}, :location => person.location.name
 
       response.should be_redirect
@@ -99,7 +99,7 @@ describe PeopleController do
   end
 
   describe "#update" do
-    let(:person) { create_person(:email => "foo@example.com") }
+    let(:person) { create_tuesday_lunch_person(:email => "foo@example.com") }
 
     context "with a valid token, setting opt_in_datetime false" do
       before { get :update, :token => person.authentication_token, :person => {:opt_in_datetime => "false"} }
@@ -149,9 +149,9 @@ describe PeopleController do
     context "when the person is currently going" do
       before do
         future = DateTime.parse("9 Nov 2100 23:59")
-        person_two = create_person(:email => "bar@example.com", :location => person.location, :opt_in_datetime => future)
-        person_three = create_person(:email => "baz@example.com", :location => person.location, :opt_in_datetime => nil)
-        person_four = create_person(:email => "joe@example.com", :location => Location.new(:name => "test_two", :address => "123 9th Street Boise, ID"))
+        person_two = create_tuesday_lunch_person(:email => "bar@example.com", :location => person.location, :opt_in_datetime => future)
+        person_three = create_tuesday_lunch_person(:email => "baz@example.com", :location => person.location, :opt_in_datetime => nil)
+        person_four = create_tuesday_lunch_person(:email => "joe@example.com", :location => Location.new(:name => "test_two", :address => "123 9th Street Boise, ID"))
         get :update, :token => person.authentication_token, :person => {:opt_in_datetime => future}
       end
 
