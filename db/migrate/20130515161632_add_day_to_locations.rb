@@ -1,6 +1,6 @@
 class AddDayToLocations < ActiveRecord::Migration
   def self.up
-    #  ISO-8601 standard, 1 is Monday, 7 is Sunday
+    #  ISO-8601 standard, 0 is Sunday, 6 is Saturday
     add_column :locations, :day, :integer, default: 2
   end
 
