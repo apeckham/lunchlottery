@@ -43,7 +43,7 @@ Spork.prefork do
     end
 
     def create_person(options)
-      options.reverse_merge!(:location => Location.new(:name => "test", :address => "149 9th Street San Francisco, CA"))
+      options.reverse_merge!(:location => Location.new(:name => "test", :address => "149 9th Street San Francisco, CA", day: 2))
       Person.create!(options)
     end
   end
