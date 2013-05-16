@@ -4,12 +4,11 @@ describe Notifier do
   describe ".remind" do
     before do
       @person = create_tuesday_lunch_person(:email => "foo@example.com")
-      @location = @person.location
       ActionMailer::Base.deliveries = []
     end
 
     it "sends the remind email" do
-      Notifier.remind(@person, @location).deliver
+      Notifier.remind(@person).deliver
       ActionMailer::Base.deliveries.length.should == 1
 
       message = ActionMailer::Base.deliveries.first
@@ -22,8 +21,8 @@ describe Notifier do
     end
 
     it "uses the locations day in the subject" do
-      @location.day = 3
-      Notifier.remind(@person, @location).deliver
+      @person.location.day = 3
+      Notifier.remind(@person).deliver
 
       message = ActionMailer::Base.deliveries.first
       message.subject.should =~ /Lunch on Wednesday\?/
