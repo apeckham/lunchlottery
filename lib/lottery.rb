@@ -15,14 +15,14 @@ module Lottery
 
   def self.send_reminders!
     Person.subscribed.each do |person|
-      if person.location.day == days_out(1)
+      if person.location.reminder_day == Date.today.wday
         Notifier.remind(person).deliver
       end
     end
   end
 
   def self.days_out num
-    zero_based_days_in_week = 6
-    (Date.today.wday + num) % zero_based_days_in_week
+    days_in_week = 7
+    (Date.today.wday + num) % days_in_week
   end
 end
