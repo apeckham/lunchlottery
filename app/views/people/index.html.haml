@@ -2,7 +2,7 @@
 
 %p
   <b>#{Linguistics::EN.numwords(@people_count).titlecase} people</b>
-  are going to lunch in random groups of 4 <b>every week.</b>
+  are going to lunch in random groups of 4 <b>every #{Date::DAYNAMES[@location.day]}.</b>
 
 - unless @person.errors.empty?
   %p.errors
