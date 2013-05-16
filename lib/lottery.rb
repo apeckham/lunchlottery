@@ -1,6 +1,6 @@
 module Lottery
   def self.send_invitations!
-    Location.where(day: days_out(2)).each do |location|
+    Location.where(day: two_days_from_today).each do |location|
       shuffled_people = location.people.subscribed.opted_in.all.shuffle
 
       if shuffled_people.length > 2
@@ -21,8 +21,8 @@ module Lottery
     end
   end
 
-  def self.days_out num
+  def self.two_days_from_today
     days_in_week = 7
-    (Date.today.wday + num) % days_in_week
+    (Date.today.wday + 2) % days_in_week
   end
 end
