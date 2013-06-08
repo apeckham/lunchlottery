@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe PeopleController do
 
-  let(:token) { create_person(:email => "foo@example.com").authentication_token }
+  let(:token) { create_tuesday_lunch_person(:email => "foo@example.com").authentication_token }
   
   it "recognizes and generates #update" do
     person_token_path(token).should == "/people/#{token}"

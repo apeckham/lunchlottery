@@ -11,4 +11,7 @@
     = f.label :address
     = f.text_field :address
   %div
+    = f.label :day
+    = f.select :day, Date::DAYNAMES.zip((0..6).to_a)
+  %div
     = f.submit

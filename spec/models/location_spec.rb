@@ -22,6 +22,12 @@ describe Location do
     location.save
     location.reload.latitude.should be_within(0.001).of(37.77572)
     location.reload.longitude.should be_within(0.001).of(-132.0841430)
+  end
 
+  it "should have the reminder day as the day before the lunch day" do
+    location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 2)
+    location.reminder_day.should == 1
+    location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 0)
+    location.reminder_day.should == 6
   end
 end

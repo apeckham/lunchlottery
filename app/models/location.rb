@@ -10,4 +10,9 @@
   def to_param
     name
   end
+
+  def reminder_day
+    days_in_week = 7
+    (day - 1) % days_in_week
+  end
 end
