@@ -6,16 +6,16 @@ describe Lottery do
       before do
         tuesday = 2
         wednesday = 3
-        @pivotal = Location.create!(:name => "pivotal", :address => "731 Market Street San Francisco, CA", day: tuesday)
+        @pivotal = Location.create!(:name => "pivotal", :address => "731 Market Street San Francisco, CA", :day => tuesday)
         @pivotal_people = new_people(7, @pivotal, "2100-11-02 23:59")
         @pivotal_people.first.opt_in_datetime = nil
         @pivotal_people.each(&:save!)
 
-        @storek = Location.create!(:name => "storek", :address => "149 9th Street San Francisco, CA", day: tuesday)
+        @storek = Location.create!(:name => "storek", :address => "149 9th Street San Francisco, CA", :day => tuesday)
         @storek_people = new_people(3, @storek, "2100-11-02 23:59")
         @storek_people.each(&:save!)
 
-        @substantial = Location.create!(:name => "substantial", :address => "900 E Pine St, Seattle, WA", day: wednesday)
+        @substantial = Location.create!(:name => "substantial", :address => "900 E Pine St, Seattle, WA", :day => wednesday)
         @substantial_people = new_people(3, @substantial, "2100-11-02 23:59")
         @substantial_people.each(&:save!)
       end
@@ -62,7 +62,7 @@ describe Lottery do
 
 
   it "doesn't send an invitation if a group has less than 3 people" do
-    location = Location.create!(:name => "yelp", :address => "1 Market Street", day: 2)
+    location = Location.create!(:name => "yelp", :address => "1 Market Street", :day => 2)
     new_people(2, location, "2100-11-02 23:59").each(&:save!)
 
     Lottery.send_invitations!
