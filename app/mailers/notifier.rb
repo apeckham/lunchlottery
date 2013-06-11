@@ -1,5 +1,5 @@
 class Notifier < ActionMailer::Base
-  def invite(people, location, total_people, groups)
+  def confirm_groups(people, location, total_people, groups)
     @people = people
     @location = location
     @opted_in_count = groups.inject(0) { |sum, group| sum + group.size }
@@ -10,7 +10,7 @@ class Notifier < ActionMailer::Base
          :from => "dine@lunchlottery.com")
   end
 
-  def remind(person)
+  def invite_to_lunch(person)
     @person = person
     day = person.location.try(:day) || 2
     @day_name = Date::DAYNAMES[day]

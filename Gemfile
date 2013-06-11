@@ -11,7 +11,6 @@ gem 'awesome_print'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'heroku'
   gem 'timecop'
   gem 'webrat'
   gem 'taps'

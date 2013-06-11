@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe Notifier do
-  describe ".remind" do
+  describe ".invite" do
     before do
       @person = create_tuesday_lunch_person(:email => "foo@example.com")
       ActionMailer::Base.deliveries = []
     end
 
-    it "sends the remind email" do
-      Notifier.remind(@person).deliver
+    it "sends the invitation email" do
+      Notifier.invite_to_lunch(@person).deliver
       ActionMailer::Base.deliveries.length.should == 1
 
       message = ActionMailer::Base.deliveries.first
@@ -22,27 +22,27 @@ describe Notifier do
 
     it "uses the locations day in the subject" do
       @person.location.day = 3
-      Notifier.remind(@person).deliver
+      Notifier.invite_to_lunch(@person).deliver
 
       message = ActionMailer::Base.deliveries.first
       message.subject.should =~ /Lunch on Wednesday\?/
     end
   end
 
-  describe ".invite" do
+  describe ".confirm" do
     before do
       @location = Location.new(:name => "mylocation", :meeting_point => "at the door")
       @total_people = new_people(8, @location)
       @people = @total_people[0..4]
       @groups = [@people[0..2], @people[3..4], @people[3..4]]
 
-      Notifier.invite(@people, @location, @total_people, @groups).deliver
+      Notifier.confirm_groups(@people, @location, @total_people, @groups).deliver
       ActionMailer::Base.deliveries.length.should == 1
 
       @message = ActionMailer::Base.deliveries.first
     end
 
-    it "sends the invite email" do
+    it "sends the confirmation email" do
       @message.subject.should =~ /Your lunch tomorrow/
       @message.to.should == @people.collect(&:email)
       @message.from.should == ["dine@lunchlottery.com"]

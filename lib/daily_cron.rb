@@ -1,7 +1,7 @@
 class DailyCron
 
   def self.work
-    Lottery.send_reminders!
-    Lottery.send_invitations!
+    Lottery.invite_to_lunch!
+    Lottery.confirm_groups!
   end
 end

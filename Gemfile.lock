@@ -31,21 +31,13 @@ GEM
     arel (2.0.9)
     awesome_print (0.4.0)
     builder (2.1.2)
-    configuration (1.2.0)
     diff-lcs (1.1.2)
     email_validator (1.0.0)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     geocoder (1.0.2)
     haml (3.0.25)
-    heroku (1.19.1)
-      activesupport (>= 2.1.0)
-      launchy (~> 0.3.2)
-      rest-client (>= 1.4.0, < 1.7.0)
     i18n (0.5.0)
-    launchy (0.3.7)
-      configuration (>= 0.0.5)
-      rake (>= 0.8.1)
     linguistics (1.0.8)
     mail (2.2.15)
       activesupport (>= 2.3.6)
@@ -121,7 +113,6 @@ DEPENDENCIES
   email_validator
   geocoder
   haml
-  heroku
   linguistics
   rails (= 3.0.5)
   rspec-rails

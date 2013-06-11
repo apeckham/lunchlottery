@@ -11,8 +11,8 @@
     name
   end
 
-  def reminder_day
+  def invite_day
     days_in_week = 7
-    (day - 1) % days_in_week
+    (day - 2) % days_in_week
   end
 end

@@ -26,8 +26,8 @@ describe Location do
 
   it "should have the reminder day as the day before the lunch day" do
     location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 2)
-    location.reminder_day.should == 1
+    location.invite_day.should == 0
     location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 0)
-    location.reminder_day.should == 6
+    location.invite_day.should == 5
   end
 end
