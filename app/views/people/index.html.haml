@@ -13,7 +13,7 @@
     = flash[:message]
 
 - if @person.errors.empty? && !flash[:message]
-  %p Sign up below! We'll pick your lunch mates and email you on #{Date::DAYNAMES[@location.invite_day]} night.
+  %p Sign up below! We'll invite you on #{Date::DAYNAMES[@location.invite_day]} night and confirm your group on #{Date::DAYNAMES[@location.invite_day + 1]} night.
 
 = form_for @person do |f|
   = f.label :email, "Email:"
