@@ -32,5 +32,9 @@ describe Location do
     location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 0)
     location.invite_day.should == 5
     location.confirm_day.should == 6
+
+    location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 1)
+    location.invite_day.should == 6
+    location.confirm_day.should == 0
   end
 end
