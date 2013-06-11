@@ -15,4 +15,8 @@
     days_in_week = 7
     (day - 2) % days_in_week
   end
+
+  def confirm_day
+    invite_day + 1
+  end
 end
