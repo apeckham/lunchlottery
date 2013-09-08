@@ -17,7 +17,7 @@
 %ul
   - @people.each do |person|
     %li
-      %img{ :src => person.gravatar_url }
+      %img{ :src => person.gravatar_url, :title => person.email }
       = person.email
 
 %p= @location.meeting_point
