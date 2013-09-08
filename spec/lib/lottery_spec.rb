@@ -20,11 +20,11 @@ describe Lottery do
         @substantial_people.each(&:save!)
       end
 
-      context "when it is monday" do
+      context "when it is tuesday" do
         before do
-          monday = Date.civil(2013, 5, 13)
+          tuesday = Date.civil(2013, 5, 14)
 
-          Timecop.freeze(monday) do
+          Timecop.freeze(tuesday) do
             Lottery.confirm_groups!
           end
         end

@@ -6,7 +6,7 @@ class Notifier < ActionMailer::Base
     @total_people = total_people
     @group_stats = group_stats(groups)
     mail(:to => @people.map(&:email),
-         :subject => "Your lunch tomorrow",
+         :subject => "Your lunch today",
          :from => "dine@lunchlottery.com")
   end
 

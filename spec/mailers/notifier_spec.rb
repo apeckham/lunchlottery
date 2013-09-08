@@ -43,7 +43,7 @@ describe Notifier do
     end
 
     it "sends the confirmation email" do
-      @message.subject.should =~ /Your lunch tomorrow/
+      @message.subject.should =~ /Your lunch today/
       @message.to.should == @people.collect(&:email)
       @message.from.should == ["dine@lunchlottery.com"]
       @message.body.to_s.should match /Hello/
