@@ -8,9 +8,15 @@ describe Dates do
       end
     end
 
-    it "should return next tuesday" do
+    it "should return next tuesday for 2" do
       Timecop.freeze(DateTime.parse("2011-11-11 11:11:11 UTC")) do
         Dates.next_lunch_day(2).should == DateTime.parse("2011-11-15 23:59:59 UTC")
+      end
+    end
+
+    it "should return next wednesday for 3" do
+      Timecop.freeze(DateTime.parse("2011-11-11 11:11:11 UTC")) do
+        Dates.next_lunch_day(3).should == DateTime.parse("2011-11-16 23:59:59 UTC")
       end
     end
 
