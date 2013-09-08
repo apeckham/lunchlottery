@@ -27,11 +27,12 @@
 .opted_in
   %h4 People who are going
   - @opted_in_people.each do |person|
-    %img{ :src => person.gravatar_url, :class => "gravatar in" }
+    %img{ :src => person.gravatar_url, :class => "gravatar in", :title => person.email }
 .non_opted_in
   %h4 People who are not (yet) going
   - @non_opted_in_people.each do |person|
-    %img{ :src => person.gravatar_url, :class => "gravatar out" }
+    %div
+      %img{ :src => person.gravatar_url, :class => "gravatar out", :title => person.email }
 %div
   %small
     If your profile picture doesn't show up here, sign up with

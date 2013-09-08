@@ -17,4 +17,4 @@
 %h3 People at #{@person.location.name} who've already opted-in
 %div#people_at_location
   - @people.each do |person|
-    %img{ :src => person.gravatar_url, :class => "gravatar in" }
+    %img{ :src => person.gravatar_url, :class => "gravatar in", :title => person.email }
