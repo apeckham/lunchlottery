@@ -12,7 +12,7 @@ class Notifier < ActionMailer::Base
 
   def invite_to_lunch(person)
     @person = person
-    day = person.location.try(:day) || 2
+    day = person.location.try(:day)
     @day_name = Date::DAYNAMES[day]
     mail(:to => @person.email,
       :subject => "Lunch on #{@day_name}?",
