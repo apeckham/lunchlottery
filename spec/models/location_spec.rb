@@ -24,17 +24,17 @@ describe Location do
     location.reload.longitude.should be_within(0.001).of(-132.0841430)
   end
 
-  it "should invite 2 days prior and confirm 1 day prior" do
+  it "should invite 2 days prior and confirm day of" do
     location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 2)
     location.invite_day.should == 0
-    location.confirm_day.should == 1
+    location.confirm_day.should == 2
 
     location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 0)
     location.invite_day.should == 5
-    location.confirm_day.should == 6
+    location.confirm_day.should == 0
 
     location = Location.create(:name => "amys house", :address => "123 Bay Street San Francisco, CA", :day => 1)
     location.invite_day.should == 6
-    location.confirm_day.should == 0
+    location.confirm_day.should == 1
   end
 end

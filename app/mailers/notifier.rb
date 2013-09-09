@@ -6,13 +6,13 @@ class Notifier < ActionMailer::Base
     @total_people = total_people
     @group_stats = group_stats(groups)
     mail(:to => @people.map(&:email),
-         :subject => "Your lunch tomorrow",
+         :subject => "Your lunch today",
          :from => "dine@lunchlottery.com")
   end
 
   def invite_to_lunch(person)
     @person = person
-    day = person.location.try(:day) || 2
+    day = person.location.try(:day)
     @day_name = Date::DAYNAMES[day]
     mail(:to => @person.email,
       :subject => "Lunch on #{@day_name}?",

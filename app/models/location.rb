@@ -17,7 +17,6 @@
   end
 
   def confirm_day
-    days_in_week = 7
-    (day - 1) % days_in_week
+    day
   end
 end
