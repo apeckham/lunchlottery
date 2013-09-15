@@ -7,7 +7,7 @@ class Person < ActiveRecord::Base
 
   belongs_to :location
   
-  scope :opted_in, where("opt_in_datetime IS NOT null and opt_in_datetime >= ?", DateTime.now)
+  scope :opted_in, where("opt_in_datetime IS NOT null and opt_in_datetime >= ?", Time.zone.now.utc)
   scope :subscribed, where(:subscribed => true)
 
   def self.find_by_authentication_token!(token)
