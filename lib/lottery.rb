@@ -1,6 +1,6 @@
 module Lottery
   def self.confirm_groups!
-    Location.where(:day => Date.today.wday).each do |location|
+    Location.where(:day => Time.zone.today.wday).each do |location|
       shuffled_people = location.people.subscribed.opted_in.all.shuffle
 
       if shuffled_people.length > 2
@@ -15,7 +15,7 @@ module Lottery
 
   def self.invite_to_lunch!
     Person.subscribed.each do |person|
-      if person.location.invite_day == Date.today.wday
+      if person.location.invite_day == Time.zone.today.wday
         Notifier.invite_to_lunch(person).deliver
       end
     end
