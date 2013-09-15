@@ -22,7 +22,7 @@ describe Lottery do
 
       context "when it is tuesday" do
         before do
-          tuesday = Date.civil(2013, 5, 14)
+          tuesday = Time.zone.parse("2013-5-14 1:11:11")
 
           Timecop.freeze(tuesday) do
             Lottery.confirm_groups!
@@ -75,7 +75,7 @@ describe Lottery do
       create_tuesday_lunch_person(:email => "foo2tuesday@example.com", :opt_in_datetime => nil)
       create_wednesday_lunch_person(:email => "foowednesday@example.com")
       create_wednesday_lunch_person(:email => "foo2wednesday@example.com", :opt_in_datetime => nil)
-      @monday = Date.civil(2013, 5, 13)
+      @monday = Time.zone.parse("2013-5-13 1:11:11")
     end
 
     it "sends the invite on monday to the wednesday people" do
