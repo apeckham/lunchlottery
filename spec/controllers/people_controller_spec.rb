@@ -146,6 +146,21 @@ describe PeopleController do
       end
     end
 
+    context "when the lunch time is in the past" do
+      let(:late_person) { create_tuesday_lunch_person(:email => "foo@example.com") }
+
+      it "tells the user it is too late to attend" do
+        a_tuesday = DateTime.new(2013, 10, 1)
+
+        Timecop.freeze(a_tuesday.next) do
+          a_tuesday = DateTime.parse("1 Oct 2013 23:59")
+          get :update, :token => late_person.authentication_token, :person => {:opt_in_datetime => a_tuesday}
+        end
+
+        response.body.should include "too late!"
+      end
+    end
+
     context "when the person is currently going" do
       before do
         future = DateTime.parse("9 Nov 2100 23:59")

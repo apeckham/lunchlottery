@@ -22,14 +22,25 @@ class PeopleController < ApplicationController
 
   def update
     @person = Person.find_by_authentication_token!(params[:token])
-    
+    @changed_opt_in_datetime = params[:person].has_key?(:opt_in_datetime)
+
+    if  @changed_opt_in_datetime
+      opt_in_time = params[:person][:opt_in_datetime]
+
+
+      if opt_in_time != "false"
+        if Time.now > opt_in_time
+          return render :text => "too late!"
+        end
+      end
+    end
+
     if @person.update_attributes(params[:person])
       flash[:notice] = "Your settings have been updated."
     else
       flash[:error] = "I had a problem saving that."
     end
 
-    @changed_opt_in_datetime = params[:person].has_key?(:opt_in_datetime)
     @changed_subscription = params[:person].has_key?(:subscribed)
     @people = Person.opted_in.where(:location_id => @person.location_id)
     
